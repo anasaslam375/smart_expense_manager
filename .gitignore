@@ -1,0 +1,140 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code related
+.vscode/
+*.code-workspace
+
+# Flutter/Dart specific
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+flutter_app/.flutter-plugins
+flutter_app/.flutter-plugins-dependencies
+flutter_app/.packages
+flutter_app/.pub-cache/
+flutter_app/.pub/
+flutter_app/build/
+flutter_app/.dart_tool/
+
+# Android specific
+android_native/.gradle/
+android_native/app/build/
+android_native/build/
+android_native/local.properties
+android_native/*.iml
+android_native/.idea/
+android_native/.DS_Store
+android_native/build/
+android_local.properties
+*.apk
+*.ap_
+*.aab
+
+# iOS specific
+ios_native/**/*.mode1v3
+ios_native/**/*.mode2v3
+ios_native/**/*.moved-aside
+ios_native/**/*.pbxuser
+ios_native/**/*.perspectivev3
+ios_native/**/*sync/
+ios_native/**/.sconsign.dblite
+ios_native/**/.tags*
+ios_native/**/.vagrant/
+ios_native/**/DerivedData/
+ios_native/**/Icon?
+ios_native/**/Pods/
+ios_native/**/.symlinks/
+ios_native/**/profile
+ios_native/**/xcuserdata
+ios_native/.generated/
+ios_native/Flutter/App.framework
+ios_native/Flutter/Flutter.framework
+ios_native/Flutter/Flutter.podspec
+ios_native/Flutter/Generated.xcconfig
+ios_native/Flutter/ephemeral/
+ios_native/Flutter/app.flx
+ios_native/Flutter/app.zip
+ios_native/Flutter/flutter_assets/
+ios_native/Flutter/flutter_export_environment.sh
+ios_native/ServiceDefinitions.json
+ios_native/Runner/GeneratedPluginRegistrant.*
+ios_native/Pods/
+ios_native/.symlinks/
+ios_native/profile
+
+# Shared/General
+*.orig
+*~
+node_modules/
+dist/
+coverage/
+.nyc_output/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~.nib
+
+# Package manager files
+package-lock.json
+yarn.lock
+Gemfile.lock
+Podfile.lock
+
+# Build artifacts
+*.o
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# Test coverage
+coverage/
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS specific
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
