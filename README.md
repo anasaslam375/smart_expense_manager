@@ -1,4 +1,4 @@
-# Smart Expense Manager - Mobile Engineering Leadership Assessment
+# Smart Expense Manager - Mobile Engineering Leadership
 
 ## Project Overview
 
