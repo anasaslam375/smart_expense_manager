@@ -113,6 +113,8 @@
 
 ### Review Checklist
 
+**General**:
+
 - Code follows style guide
 - Tests included and passing
 - No hardcoded values
@@ -122,6 +124,37 @@
 - Accessibility checked
 - Documentation updated
 - No merge conflicts
+
+**Android Specific**:
+
+- Kotlin best practices followed
+- Jetpack Compose components used correctly
+- Hilt dependency injection proper
+- Room database queries optimized
+- Coroutines used correctly
+- StateFlow/SharedFlow appropriate
+- Memory leaks avoided (proper lifecycle)
+
+**iOS Specific**:
+
+- Swift best practices followed
+- SwiftUI components used correctly
+- SwiftData/Core Data operations correct
+- Async/await used properly
+- Combine publishers appropriate
+- Memory management correct (weak/unowned)
+- Auto Layout constraints valid
+
+**Flutter Specific**:
+
+- Dart best practices followed
+- BLoC pattern used correctly
+- State management appropriate
+- Hive database used correctly
+- GetIt dependency injection correct
+- Lifecycle awareness implemented
+- Memory leaks avoided (dispose controllers)
+- const widgets used where possible
 
 ### Code Review Best Practices
 
@@ -146,9 +179,40 @@
 
 ### Onboarding
 
+**Android Developer Onboarding**:
+
+- Set up Android Studio with Kotlin plugin
+- Configure Gradle and dependencies
+- Review Jetpack Compose basics
+- Understand Hilt DI setup
+- Learn Room database schema
+- Review Retrofit networking
+- Set up emulator and physical device testing
+
+**iOS Developer Onboarding**:
+
+- Set up Xcode with Apple Developer account
+- Configure provisioning profiles and signing
+- Review SwiftUI basics
+- Understand SwiftData/Core Data
+- Learn URLSession async/await
+- Review Combine framework
+- Set up iOS Simulator and physical device testing
+
+**Flutter Developer Onboarding**:
+
+- Set up Flutter SDK and Android Studio/VS Code
+- Configure pubspec.yaml dependencies
+- Review Flutter widget basics
+- Understand BLoC pattern
+- Learn Hive database
+- Review Dio networking
+- Set up emulator and physical device testing
+
+**Common Onboarding**:
+
 - Provide clear documentation
 - Assign buddy/mentor
-- Set up development environment
 - Review architecture and codebase
 - Explain team processes
 - Introduce to team members

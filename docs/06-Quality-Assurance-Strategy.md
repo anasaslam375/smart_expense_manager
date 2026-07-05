@@ -239,6 +239,136 @@ func testExpenseCreation() {
 
 ---
 
+## Flutter Testing Strategy
+
+### Unit Testing
+
+**Scope**:
+
+- BLoC cubits
+- Use cases
+- Repository implementations
+- Utility functions
+- Data models
+
+**Tools**:
+
+- Flutter Test
+- Mockito for mocking
+- Flutter Mocktail for modern mocking
+- Build Runner for code generation
+
+**Coverage Target**: 80% for business logic, 60% for UI code
+
+**Example Test Structure**:
+
+```dart
+class ExpenseBlocTest {
+  late ExpenseBloc expenseBloc;
+  late MockExpenseRepository mockRepository;
+
+  setUp(() {
+    mockRepository = MockExpenseRepository();
+    expenseBloc = ExpenseBloc(mockRepository);
+  });
+
+  test('emits [ExpenseLoading, ExpenseLoaded] when expenses are loaded successfully', () {
+    // Given
+    final expenses = [Expense(id: 1, amount: 100.0)];
+    when(mockRepository.getExpenses()).thenAnswer((_) async => expenses);
+
+    // When
+    expenseBloc.add(LoadExpenses());
+
+    // Then
+    expectLater(
+      expenseBloc.stream,
+      emitsInOrder([
+        ExpenseLoading(),
+        ExpenseLoaded(expenses),
+      ]),
+    );
+  });
+}
+```
+
+### Widget Testing
+
+**Scope**:
+
+- Critical user flows
+- Navigation
+- Screen transitions
+- User interactions
+- Form validation
+
+**Tools**:
+
+- Flutter Widget Testing
+- Golden tests for visual regression
+- Integration test for end-to-end
+
+**Test Scenarios**:
+
+- Login flow
+- Expense creation
+- Expense editing
+- Filtering and search
+- Navigation between screens
+
+**Example**:
+
+```dart
+testWidgets('expense creation flow', (WidgetTester tester) async {
+  // Build widget
+  await tester.pumpWidget(MyApp());
+
+  // Navigate to expense creation
+  await tester.tap(find.text('Add Expense'));
+  await tester.pumpAndSettle();
+
+  // Fill form
+  await tester.enterText(find.byKey(Key('amount_field')), '100.00');
+  await tester.tap(find.text('Category'));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text('Food'));
+  await tester.pumpAndSettle();
+
+  // Submit
+  await tester.tap(find.text('Save'));
+  await tester.pumpAndSettle();
+
+  // Verify
+  expect(find.text('Expense saved'), findsOneWidget);
+});
+```
+
+### Integration Testing
+
+**Scope**:
+
+- Repository with data sources
+- API integration
+- Database operations
+- Sync functionality
+
+**Tools**:
+
+- Flutter Integration Test
+- MockWebServer for API mocking
+- Hive testing support
+- Flutter Driver (deprecated, use integration_test)
+
+**Test Scenarios**:
+
+- API call with successful response
+- API call with error response
+- Database CRUD operations
+- Offline queue operations
+- Sync conflict resolution
+
+---
+
 ## Cross-Platform Testing
 
 ### Regression Testing
@@ -278,6 +408,7 @@ func testExpenseCreation() {
 
 - Android: Android Profiler, Firebase Performance Monitoring
 - iOS: Instruments, Xcode Metrics
+- Flutter: DevTools, Firebase Performance Monitoring
 - Cross-platform: Lighthouse for web components
 
 **Targets**:
@@ -302,6 +433,7 @@ func testExpenseCreation() {
 
 - Android: Accessibility Scanner, TalkBack
 - iOS: Accessibility Inspector, VoiceOver
+- Flutter: Flutter Accessibility Semantics, platform screen readers
 - Manual testing with assistive technologies
 
 **Test Scenarios**:

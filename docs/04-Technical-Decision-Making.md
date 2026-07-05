@@ -2,7 +2,7 @@
 
 ## Scenario 1: Framework Choice Disagreement
 
-**Situation**: Android team wants Jetpack Compose. iOS team wants UIKit instead of SwiftUI.
+**Situation**: Android team wants Jetpack Compose. iOS team wants UIKit instead of SwiftUI. Flutter team wants to use Flutter for cross-platform development.
 
 ### Decision-Making Process
 
@@ -38,6 +38,14 @@
    - SwiftUI: Limited to iOS 13+
    - UIKit: Works on all supported iOS versions
 
+   **Flutter (Cross-platform)**
+   - Single codebase for iOS, Android, Web
+   - Modern, reactive framework with hot reload
+   - Strong community and growing ecosystem
+   - Good performance with native compilation
+   - Faster development for cross-platform features
+   - Team wants cross-platform efficiency
+
 4. **Decision**
 
    **Approve Jetpack Compose for Android**
@@ -53,12 +61,26 @@
    - Apple's clear direction
    - Faster development cycles
 
+   **Approve Flutter for Cross-platform (with conditions)**
+   - Use Flutter for shared business logic and cross-platform features
+   - Maintain native iOS and Android for platform-specific optimizations
+   - Hybrid approach: Flutter for core features, native for platform-specific
+   - Evaluate Flutter for future cross-platform expansion
+   - Team can leverage Flutter for rapid prototyping
+
    **Conditions for iOS team**:
    - Provide training and learning time
    - Start with non-critical features
    - Have UIKit as fallback for complex scenarios
    - Pair programming with SwiftUI-experienced developers
    - Gradual migration strategy
+
+   **Conditions for Flutter team**:
+   - Provide training on Flutter best practices
+   - Start with non-critical cross-platform features
+   - Maintain native fallbacks for platform-specific features
+   - Pair programming with Flutter-experienced developers
+   - Evaluate Flutter performance and UX parity
 
 5. **Rationale**
    - Both platforms using modern, declarative frameworks
@@ -74,7 +96,14 @@
    - Invest in training and documentation
    - Create hybrid approach if necessary
 
-7. **Documentation**
+7. **Mitigation for Flutter Team Concerns**
+   - Address concerns about Flutter performance and UX parity
+   - Provide proof-of-concept for complex UI scenarios
+   - Allow native fallbacks for platform-specific features
+   - Invest in training and documentation
+   - Create hybrid approach where necessary
+
+8. **Documentation**
    - Create ADR documenting the decision
    - Include trade-offs and reasoning
    - Review decision after 3 months
@@ -243,13 +272,14 @@
 
 ## Scenario 4: Platform Release Imbalance
 
-**Situation**: Android is completed. iOS is behind schedule. How do you manage the release?
+**Situation**: Android is completed. iOS is behind schedule. Flutter is also behind schedule. How do you manage the release?
 
 ### Decision-Making Process
 
 1. **Assess Situation**
    - Determine how far behind iOS is
-   - Identify specific blockers or issues
+   - Determine how far behind Flutter is
+   - Identify specific blockers or issues for each platform
    - Assess impact on overall release timeline
    - Evaluate business implications of staggered release
 
@@ -258,17 +288,18 @@
    **Option A: Staggered Release**
    - Release Android on schedule
    - Release iOS when ready
-   - Pros: Android users get value, no rush on iOS
+   - Release Flutter when ready
+   - Pros: Android users get value, no rush on other platforms
    - Cons: Inconsistent user experience, marketing complexity
 
-   **Option B: Delay Android for iOS**
-   - Hold Android release until iOS catches up
+   **Option B: Delay Android for Others**
+   - Hold Android release until iOS and Flutter catch up
    - Pros: Unified release, consistent experience
    - Cons: Delayed value delivery, potential Android user frustration
 
-   **Option C: Accelerate iOS Development**
-   - Add resources to iOS team
-   - Reduce scope for iOS MVP
+   **Option C: Accelerate Development**
+   - Add resources to iOS and Flutter teams
+   - Reduce scope for iOS and Flutter MVP
    - Crunch time (use carefully)
    - Pros: Unified release, maintains timeline
    - Cons: Cost, quality risk, team burnout
@@ -291,10 +322,10 @@
    - Plan marketing for each platform
 
    **Supporting Actions**:
-   - Add temporary resources to iOS if possible
-   - Reduce iOS scope to critical features only
-   - Focus Android team on supporting iOS (code reviews, knowledge sharing)
-   - Implement aggressive bug fixing for iOS
+   - Add temporary resources to iOS and Flutter if possible
+   - Reduce iOS and Flutter scope to critical features only
+   - Focus Android team on supporting iOS and Flutter (code reviews, knowledge sharing)
+   - Implement aggressive bug fixing for iOS and Flutter
 
 5. **Execution Plan**
 
@@ -302,23 +333,24 @@
    - Finalize Android testing and deployment
    - Submit to Google Play
    - Monitor Android release
-   - Intensify iOS development
+   - Intensify iOS and Flutter development
 
-   **Week 3-4 (iOS Catch-up)**:
-   - Android team supports iOS (code reviews, testing)
-   - Focus on critical iOS features only
+   **Week 3-4 (iOS and Flutter Catch-up)**:
+   - Android team supports iOS and Flutter (code reviews, testing)
+   - Focus on critical iOS and Flutter features only
    - Extended hours if necessary (with compensation)
    - Daily progress tracking
 
-   **Week 5-6 (iOS Release)**:
-   - Finalize iOS testing
-   - Submit to App Store
-   - Coordinate marketing for iOS launch
+   **Week 5-6 (iOS and Flutter Release)**:
+   - Finalize iOS and Flutter testing
+   - Submit iOS to App Store
+   - Submit Flutter to Google Play and App Store
+   - Coordinate marketing for iOS and Flutter launch
 
 6. **Risk Mitigation**
 
    **Quality Risk**:
-   - Maintain quality gates for iOS
+   - Maintain quality gates for iOS and Flutter
    - No shortcuts on testing
    - Be prepared to delay further if quality insufficient
 

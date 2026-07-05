@@ -87,6 +87,20 @@
 - [ ] Memory leaks avoided
 - [ ] Background tasks appropriate
 
+## Flutter Specific
+
+- [ ] Dart best practices followed
+- [ ] BLoC pattern used correctly
+- [ ] State management appropriate
+- [ ] Hive database used correctly
+- [ ] GetIt dependency injection correct
+- [ ] Lifecycle awareness implemented
+- [ ] Memory leaks avoided (dispose controllers, close streams)
+- [ ] Background tasks appropriate
+- [ ] const widgets used where possible
+- [ ] Keys used for widget identification
+- [ ] Build method optimized (avoid unnecessary rebuilds)
+
 ## Accessibility
 
 - [ ] All interactive elements have labels

@@ -134,14 +134,23 @@
 
 **iOS (Swift)**:
 
-- Follow Swift API Design Guidelines
-- Use SwiftLint for linting
+- Follow Swift API design guidelines
+- Use SwiftLint for formatting
 - Maximum line length: 120 characters
 - Use meaningful names
 - Prefer let over var
 - Use structs for value types
-- Avoid force unwrapping
-- Use guard for early exits
+- Avoid nested functions (> 3 levels)
+
+**Flutter (Dart)**:
+
+- Follow Dart effective style guide
+- Use dart format for formatting
+- Maximum line length: 120 characters
+- Use meaningful names
+- Prefer final variables
+- Use data classes for models
+- Avoid nested functions (> 3 levels)
 
 ### Folder Structure
 
@@ -193,6 +202,32 @@ SmartExpenseManager/
 └── DI/
 ```
 
+**Flutter**:
+
+```text
+lib/
+├── core/
+│   ├── constants/
+│   ├── theme/
+│   └── utils/
+├── data/
+│   ├── models/
+│   ├── repositories/
+│   └── datasources/
+│       ├── local/
+│       └── remote/
+├── domain/
+│   ├── entities/
+│   ├── usecases/
+│   └── repositories/
+├── presentation/
+│   ├── bloc/
+│   ├── pages/
+│   ├── widgets/
+│   └── routes/
+└── main.dart
+```
+
 ### Dependency Management
 
 **Android**:
@@ -210,6 +245,14 @@ SmartExpenseManager/
 - Regular dependency updates
 - Document dependency purposes
 - Resolve conflicts promptly
+
+**Flutter**:
+
+- Use pubspec.yaml for dependencies
+- Pin dependency versions
+- Regular dependency updates (flutter pub upgrade)
+- Document dependency purposes
+- Use dependency_overrides for conflicts
 
 ### Error Handling
 
@@ -238,6 +281,30 @@ enum AppError: Error {
     case networkError(String)
     case validationError(String)
     case unknownError(String)
+}
+```
+
+**Flutter**:
+
+```dart
+abstract class AppError extends Equatable {
+  final String message;
+  const AppError(this.message);
+  
+  @override
+  List<Object> get props => [message];
+}
+
+class NetworkError extends AppError {
+  const NetworkError(String message) : super(message);
+}
+
+class ValidationError extends AppError {
+  const ValidationError(String message) : super(message);
+}
+
+class UnknownError extends AppError {
+  const UnknownError(String message) : super(message);
 }
 ```
 
@@ -287,6 +354,14 @@ enum AppError: Error {
 - Avoid retain cycles
 - Use background queues for heavy work
 
+**Flutter Specific**:
+
+- Use const widgets where possible
+- Optimize ListView/GridView with builders
+- Use cached_network_image for image loading
+- Avoid unnecessary rebuilds (use const, keys)
+- Use Isolate for heavy computations
+
 ### Memory Management
 
 **Android**:
@@ -303,6 +378,14 @@ enum AppError: Error {
 - Avoid retain cycles (weak/unowned)
 - Use value types where appropriate
 - Profile with Instruments
+- Manage large objects carefully
+
+**Flutter**:
+
+- Understand Dart garbage collection
+- Avoid memory leaks (dispose controllers, close streams)
+- Use const constructors where possible
+- Profile with DevTools
 - Manage large objects carefully
 
 ---

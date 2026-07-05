@@ -90,6 +90,39 @@ class SyncManager {
 }
 ```
 
+**Flutter**:
+
+```dart
+class SyncManager {
+  final ExpenseLocalDataSource localDataSource;
+  final ExpenseRemoteDataSource remoteDataSource;
+
+  Future<void> sync() async {
+    final lastSyncTime = await localDataSource.getLastSyncTime();
+    
+    // Pull changes from server
+    final serverChanges = await remoteDataSource.getChangesSince(lastSyncTime);
+    
+    // Push local changes
+    final localChanges = await localDataSource.getPendingChanges();
+    final pushResult = await remoteDataSource.pushChanges(localChanges);
+    
+    // Merge and resolve conflicts
+    final merged = mergeChanges(serverChanges: serverChanges, localChanges: pushResult);
+    
+    // Update local database
+    await localDataSource.updateAll(merged);
+    
+    // Update sync timestamp
+    await localDataSource.updateLastSyncTime(DateTime.now());
+  }
+  
+  List<Expense> mergeChanges({required List<Expense> server, required List<Expense> local}) {
+    // Conflict resolution logic
+  }
+}
+```
+
 **Optimizations**:
 
 - Batch operations for efficiency
@@ -223,6 +256,37 @@ class ImageUploader {
 }
 ```
 
+**Flutter**:
+
+```dart
+class ImageUploader {
+  final ImageUploadApi api;
+
+  Future<String> uploadImage(File file) async {
+    // Compress
+    final compressed = await compressImage(file);
+    
+    // Generate hash
+    final hash = await generateHash(compressed);
+    
+    // Check if already uploaded
+    final existingUrl = await api.checkImageExists(hash);
+    if (existingUrl != null) return existingUrl;
+    
+    // Upload in chunks
+    final chunks = splitIntoChunks(compressed, 5 * 1024 * 1024);
+    final uploadId = await api.initiateUpload(hash, chunks.length);
+    
+    for (var i = 0; i < chunks.length; i++) {
+      await api.uploadChunk(uploadId, i, chunks[i]);
+    }
+    
+    // Complete upload
+    return await api.completeUpload(uploadId);
+  }
+}
+```
+
 **Storage**:
 
 - AWS S3 with lifecycle policies
@@ -238,7 +302,7 @@ class ImageUploader {
 
 **At Rest**:
 
-- Database encryption (SQLCipher for Android, Data Protection for iOS)
+- Database encryption (SQLCipher for Android, Data Protection for iOS, Hive encryption for Flutter)
 - Keychain/Keystore for sensitive keys
 - File-level encryption for cached data
 
@@ -291,6 +355,27 @@ class SecureStorage {
 }
 ```
 
+**Flutter**:
+
+```dart
+// flutter_secure_storage
+class SecureStorage {
+  final FlutterSecureStorage _storage = FlutterSecureStorage();
+
+  Future<void> store(String key, String value) async {
+    await _storage.write(key: key, value: value);
+  }
+
+  Future<String?> read(String key) async {
+    return await _storage.read(key: key);
+  }
+
+  Future<void> delete(String key) async {
+    await _storage.delete(key: key);
+  }
+}
+```
+
 **Sensitive Data**:
 
 - Authentication tokens
@@ -323,6 +408,7 @@ class SecureStorage {
 
 - Android: EncryptedSharedPreferences
 - iOS: Keychain
+- Flutter: flutter_secure_storage
 - Never store in plain text or UserDefaults
 
 **Token Refresh**:
@@ -350,6 +436,63 @@ class AuthInterceptor(
         
         return response
     }
+}
+```
+
+**iOS**:
+
+```swift
+class AuthInterceptor: Interceptor {
+    func intercept(_ chain: Interceptor.Chain) async throws -> Response {
+        var request = chain.request
+        request.addValue("Bearer \(tokenProvider.getAccessToken())", forHTTPHeaderField: "Authorization")
+        
+        let response = try await chain.proceed(request)
+        
+        if response.statusCode == 401 {
+            let newToken = try await tokenProvider.refreshToken()
+            var newRequest = chain.request
+            newRequest.addValue("Bearer \(newToken)", forHTTPHeaderField: "Authorization")
+            return try await chain.proceed(newRequest)
+        }
+        
+        return response
+    }
+}
+```
+
+**Flutter**:
+
+```dart
+class AuthInterceptor extends Interceptor {
+  final TokenProvider tokenProvider;
+
+  AuthInterceptor(this.tokenProvider);
+
+  @override
+  Future onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    final token = await tokenProvider.getAccessToken();
+    options.headers['Authorization'] = 'Bearer $token';
+    handler.next(options);
+  }
+
+  @override
+  Future onError(DioException err, ErrorInterceptorHandler handler) async {
+    if (err.response?.statusCode == 401) {
+      try {
+        final newToken = await tokenProvider.refreshToken();
+        final options = err.requestOptions;
+        options.headers['Authorization'] = 'Bearer $newToken';
+        final response = await Dio().fetch(options);
+        handler.resolve(response);
+        return;
+      } catch (e) {
+        handler.next(err);
+        return;
+      }
+    }
+    handler.next(err);
+  }
 }
 ```
 
@@ -500,6 +643,27 @@ class UserDataDeleter(
 "add_expense" = "Agregar Gasto";
 ```
 
+**Flutter**:
+
+```dart
+// lib/l10n/app_en.arb
+{
+  "@locale": "en",
+  "expense_amount": "Expense Amount",
+  "add_expense": "Add Expense",
+}
+
+// lib/l10n/app_es.arb
+{
+  "@locale": "es",
+  "expense_amount": "Monto del Gasto",
+  "add_expense": "Agregar Gasto",
+}
+
+// Usage in code
+text: AppLocalizations.of(context)!.expenseAmount
+```
+
 **Supported Languages**:
 
 - English (en)
@@ -603,7 +767,7 @@ class CurrencyConverter(
 
 ### Application Security
 
-- Code obfuscation (ProGuard/R8 for Android)
+- Code obfuscation (ProGuard/R8 for Android, bitcode for iOS, flutter_oss_licensing for Flutter)
 - Root/jailbreak detection
 - Tamper detection
 - Runtime application self-protection (RASP)

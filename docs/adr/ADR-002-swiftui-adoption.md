@@ -53,5 +53,5 @@ We will use SwiftUI for iOS UI development.
 ## Alternatives Considered
 
 - UIKit: Mature but declining, not Apple's future
-- Flutter: Cross-platform but not native iOS experience
+- Flutter: Cross-platform but not native iOS experience (adopted for cross-platform features)
 - React Native: Cross-platform but not native iOS experience

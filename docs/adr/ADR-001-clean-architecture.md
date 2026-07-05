@@ -18,7 +18,7 @@ We need to choose an architectural pattern for the Smart Expense Manager mobile 
 
 We will implement Clean Architecture with the following layers:
 
-1. **Presentation Layer**: UI components (SwiftUI), ViewModels, state management
+1. **Presentation Layer**: UI components (SwiftUI for iOS, Jetpack Compose for Android, Flutter for cross-platform), ViewModels/BLoC, state management
 2. **Domain Layer**: Use cases, entities, repository interfaces
 3. **Data Layer**: Repository implementations, data sources (API, local database)
 

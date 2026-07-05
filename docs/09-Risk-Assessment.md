@@ -36,7 +36,7 @@
 
 #### Risk 3: Technology Stack Obsolescence
 
-- **Description**: Chosen frameworks may become deprecated
+- **Description**: Chosen frameworks may become deprecated (Jetpack Compose, SwiftUI, Flutter)
 - **Probability**: Low
 - **Impact**: High
 - **Mitigation Strategy**:
@@ -44,6 +44,7 @@
   - Regular dependency updates
   - Monitor technology roadmaps
   - Architecture that allows framework swapping
+  - Evaluate Flutter's long-term support and ecosystem health
 - **Contingency Plan**:
   - Migration plan for deprecated technologies
   - Budget allocated for major migrations
@@ -55,7 +56,7 @@
 
 #### Risk 4: Skill Gaps
 
-- **Description**: Team may lack expertise in chosen technologies
+- **Description**: Team may lack expertise in chosen technologies (Kotlin, Swift, Dart/Flutter)
 - **Probability**: Medium
 - **Impact**: High
 - **Mitigation Strategy**:
@@ -63,6 +64,7 @@
   - Pair programming for knowledge transfer
   - Technical documentation and guides
   - External consultants if needed
+  - Flutter-specific training for cross-platform development
 - **Contingency Plan**:
   - Hire experienced contractors
   - Reduce scope to match team capabilities
@@ -85,7 +87,7 @@
 
 #### Risk 6: Communication Issues
 
-- **Description**: Poor communication between Android and iOS teams
+- **Description**: Poor communication between Android, iOS, and Flutter teams
 - **Probability**: Medium
 - **Impact**: Medium
 - **Mitigation Strategy**:
@@ -93,6 +95,7 @@
   - Shared documentation and specifications
   - Unified project management tools
   - Clear communication channels
+  - Flutter team integration with native teams
 - **Contingency Plan**:
   - Dedicated integration lead
   - Increased meeting frequency

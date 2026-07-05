@@ -11,44 +11,50 @@ graph TB
     subgraph "Client Layer"
         A[Android App] --> B[Local Database - Room]
         C[iOS App] --> D[Local Database - Core Data]
-        A --> E[Network Layer - Retrofit]
-        C --> F[Network Layer - URLSession]
+        E[Flutter App] --> F[Local Database - Hive]
+        A --> G[Network Layer - Retrofit]
+        C --> H[Network Layer - URLSession]
+        E --> I[Network Layer - Dio]
     end
     
     subgraph "Data Layer"
-        E --> G[API Gateway]
-        F --> G
-        B --> H[Sync Manager]
-        D --> H
+        G --> J[API Gateway]
+        H --> J
+        I --> J
+        B --> K[Sync Manager]
+        D --> K
+        F --> K
     end
     
     subgraph "Backend Services"
-        G --> I[Authentication Service]
-        G --> J[Expense API]
-        G --> K[Category API]
-        G --> L[User API]
-        G --> M[Analytics API]
+        J --> L[Authentication Service]
+        J --> M[Expense API]
+        J --> N[Category API]
+        J --> O[User API]
+        J --> P[Analytics API]
     end
     
     subgraph "Infrastructure"
-        I --> N[OAuth 2.0 / JWT]
-        J --> O[PostgreSQL]
-        K --> O
-        L --> O
-        H --> P[Redis Cache]
-        G --> Q[Message Queue]
+        L --> Q[OAuth 2.0 / JWT]
+        M --> R[PostgreSQL]
+        N --> R
+        O --> R
+        K --> S[Redis Cache]
+        J --> T[Message Queue]
     end
     
     subgraph "External Services"
-        Q --> R[Push Notification Service - FCM/APNs]
-        A --> S[Firebase Crashlytics]
-        C --> T[Crashlytics]
-        A --> U[Firebase Analytics]
-        C --> V[Analytics]
+        T --> U[Push Notification Service - FCM/APNs]
+        A --> V[Firebase Crashlytics]
+        C --> W[Crashlytics]
+        E --> X[Firebase Crashlytics]
+        A --> Y[Firebase Analytics]
+        C --> Z[Analytics]
+        E --> AA[Analytics]
     end
     
     subgraph "Storage"
-        O --> W[AWS S3 - Receipt Images]
+        R --> AB[AWS S3 - Receipt Images]
     end
 ```
 
@@ -57,10 +63,10 @@ graph TB
 **Mobile Architecture Pattern:**
 Clean Architecture with MVVM
 
-- **Presentation Layer**: UI components (Jetpack Compose/SwiftUI) + ViewModels
+- **Presentation Layer**: UI components (Jetpack Compose/SwiftUI/Flutter) + ViewModels/BLoC
 - **Domain Layer**: Business logic, use cases, entities
 - **Data Layer**: Repository implementations, data sources (API, local DB)
-- **Dependency Injection**: Hilt (Android) / custom DI container (iOS)
+- **Dependency Injection**: Hilt (Android) / custom DI container (iOS) / GetIt (Flutter)
 
 **Backend Interaction:**
 
@@ -96,6 +102,7 @@ sequenceDiagram
 
 - **Android**: Room Database with SQLite
 - **iOS**: Core Data / SwiftData
+- **Flutter**: Hive (NoSQL) or SQLite
 - **Shared Schema**: Same entity definitions across platforms
 - **Data Models**: Expense, Category, User, Receipt, Budget
 
@@ -167,6 +174,7 @@ sequenceDiagram
 
 - **Android**: Firebase Analytics
 - **iOS**: Firebase Analytics / App Analytics
+- **Flutter**: Firebase Analytics
 - **Events Tracked**:
   - Screen views
   - Feature usage (add expense, categorize, etc.)
@@ -178,6 +186,7 @@ sequenceDiagram
 
 - **Android**: Firebase Crashlytics
 - **iOS**: Firebase Crashlytics
+- **Flutter**: Firebase Crashlytics
 - **Error Tracking**:
   - Crash reports with stack traces
   - Non-fatal errors
@@ -310,6 +319,66 @@ sequenceDiagram
 - **Async/Await**: Modern concurrency, readable, structured concurrency
 - **@Published**: Reactive state management, SwiftUI integration
 
+#### Flutter Architecture
+
+**Technology Stack:**
+
+- **Language**: Dart 3.0+
+- **UI Framework**: Flutter with Material Design
+- **Architecture Pattern**: Clean Architecture with BLoC
+- **Dependency Injection**: GetIt
+- **Local Database**: Hive (NoSQL) or SQLite
+- **Networking**: Dio
+- **Async**: async/await, Future, Stream
+- **State Management**: Flutter BLoC (Business Logic Component)
+- **Image Loading**: cached_network_image
+- **Navigation**: GoRouter
+- **Testing**: Flutter Test, Mockito
+
+**Architecture Layers:**
+
+```text
+┌─────────────────────────────────────┐
+│     Presentation Layer              │
+│  ┌───────────────────────────────┐  │
+│  │  Flutter Widgets             │  │
+│  │  BLoC Cubits                 │  │
+│  │  State Streams               │  │
+│  └───────────────────────────────┘  │
+└─────────────────────────────────────┘
+              ↓
+┌─────────────────────────────────────┐
+│       Domain Layer                  │
+│  ┌───────────────────────────────┐  │
+│  │  Use Cases                    │  │
+│  │  Repository Interfaces        │  │
+│  │  Domain Entities              │  │
+│  └───────────────────────────────┘  │
+└─────────────────────────────────────┘
+              ↓
+┌─────────────────────────────────────┐
+│        Data Layer                   │
+│  ┌───────────────────────────────┐  │
+│  │  Repository Implementations   │  │
+│  │  Data Sources                 │  │
+│  │  - Remote (Dio)               │  │
+│  │  - Local (Hive)               │  │
+│  │  - Cache                      │  │
+│  └───────────────────────────────┘  │
+└─────────────────────────────────────┘
+```
+
+**Why These Choices**:
+
+- **Dart**: Type-safe, excellent performance, great tooling, single codebase for multiple platforms
+- **Flutter**: Fast development, native performance, hot reload, rich widget library
+- **BLoC**: Clear separation of business logic from UI, testable, reactive state management
+- **Clean Architecture**: Platform-independent, testable, maintainable
+- **Hive**: Fast, lightweight NoSQL database, easy to use, no schema required
+- **Dio**: Powerful HTTP client with interceptors, transformers, and error handling
+- **Async/Await**: Modern concurrency, readable, similar to other languages
+- **GetIt**: Simple service locator, compile-time safety, excellent for DI
+
 ---
 
 ### 3. Shared Engineering Standards
@@ -338,6 +407,15 @@ sequenceDiagram
 - Variables/Properties: camelCase (e.g., `expenseAmount`)
 - Constants: camelCase or UPPER_SNAKE_CASE (e.g., `maxExpenseAmount`)
 - SwiftUI Views: PascalCase (e.g., `ExpenseListItem`)
+
+**Flutter (Dart)**:
+
+- Classes: PascalCase (e.g., `ExpenseViewModel`)
+- Functions: camelCase (e.g., `getExpenses()`)
+- Variables: camelCase (e.g., `expenseAmount`)
+- Constants: lowerCamelCase or UPPER_SNAKE_CASE (e.g., `maxExpenseAmount`)
+- Widgets: PascalCase (e.g., `ExpenseListItem`)
+- Files: snake_case (e.g., `expense_view_model.dart`)
 
 #### API Contracts
 
@@ -395,13 +473,74 @@ sequenceDiagram
 - `CONFLICT`: 409
 - `SERVER_ERROR`: 500
 
-**Platform Implementation**:
+**Android Implementation**:
 
-- **Android**: sealed classes for error states
-- **iOS**: enum with associated values
-- Centralized error handling
-- User-friendly error messages
-- Logging of technical errors
+```kotlin
+sealed class AppError {
+    data class NetworkError(val message: String) : AppError()
+    data class ValidationError(val field: String, val message: String) : AppError()
+    data class NotFoundError(val resource: String) : AppError()
+    data class ServerError(val code: Int, val message: String) : AppError()
+    data class UnknownError(val message: String) : AppError()
+}
+
+// Usage in ViewModel
+when (result) {
+    is Result.Success -> _uiState.value = UiState.Success(result.data)
+    is Result.Error -> _uiState.value = UiState.Error(result.error)
+}
+```
+
+**iOS Implementation**:
+
+```swift
+enum AppError: Error {
+    case networkError(String)
+    case ValidationError(field: String, message: String)
+    case NotFoundError(String)
+    case ServerError(code: Int, message: String)
+    case UnknownError(String)
+}
+
+// Usage in ViewModel
+switch result {
+case .success(let data):
+    uiState = .success(data)
+case .failure(let error):
+    uiState = .error(error)
+}
+```
+
+**Flutter Implementation**:
+
+```dart
+sealed class AppError {
+  final String message;
+  const AppError(this.message);
+}
+
+class NetworkError extends AppError {
+  const NetworkError(super.message);
+}
+
+class ValidationError extends AppError {
+  final String field;
+  const ValidationError(this.field, super.message);
+}
+
+class NotFoundError extends AppError {
+  final String resource;
+  const NotFoundError(this.resource, super.message);
+}
+
+// Usage in BLoC
+emit(state.copyWith(
+  status: result.isSuccess 
+    ? BlocStatus.success 
+    : BlocStatus.failure,
+  error: result.error,
+));
+```
 
 #### Logging
 
@@ -433,6 +572,12 @@ Timber.d("Expense created: id=$expenseId, amount=$amount")
 Logger.debug("Expense created: id=\(expenseId), amount=\(amount)")
 ```
 
+**Flutter**: logger package
+
+```dart
+logger.d('Expense created: id=$expenseId, amount=$amount');
+```
+
 #### Analytics
 
 **Standard Events**:
@@ -446,12 +591,83 @@ Logger.debug("Expense created: id=\(expenseId), amount=\(amount)")
 - `export_triggered`: Export format
 - `sync_completed`: Duration, item count
 
-**Event Properties**:
+**Android Implementation**:
 
-- Consistent naming across platforms
-- Use snake_case for property names
-- Include relevant context
-- No PII in analytics
+```kotlin
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+
+private val firebaseAnalytics = Firebase.analytics
+
+fun logExpenseCreated(amount: Double, category: String) {
+    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+        param(FirebaseAnalytics.Param.ITEM_ID, "expense")
+        param(FirebaseAnalytics.Param.ITEM_NAME, category)
+        param("amount", amount)
+        param("timestamp", System.currentTimeMillis())
+    }
+}
+
+fun logScreenView(screenName: String) {
+    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+        param(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
+    }
+}
+```
+
+**iOS Implementation**:
+
+```swift
+import FirebaseAnalytics
+import FirebaseCore
+
+let analytics = Analytics.analytics()
+
+func logExpenseCreated(amount: Double, category: String) {
+    analytics.logEvent("expense_created", parameters: [
+        AnalyticsParameterItemID: "expense" as String,
+        AnalyticsParameterItemName: category,
+        "amount": amount,
+        "timestamp": Date().timeIntervalSince1970
+    ])
+}
+
+func logScreenView(screenName: String) {
+    analytics.logEvent(FirebaseAnalyticsEventScreenView, parameters: [
+        AnalyticsParameterScreenName: screenName
+    ])
+}
+```
+
+**Flutter Implementation**:
+
+```dart
+import 'package:firebase_analytics/firebase_analytics.dart';
+
+class AnalyticsService {
+  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
+
+  Future<void> logExpenseCreated(double amount, String category) async {
+    await _analytics.logEvent(
+      name: 'expense_created',
+      parameters: {
+        'item_id': 'expense',
+        'item_name': category,
+        'amount': amount,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      },
+    );
+  }
+
+  Future<void> logScreenView(String screenName) async {
+    await _analytics.logEvent(
+      name: 'screen_view',
+      parameters: {'screen_name': screenName},
+    );
+  }
+}
+```
 
 #### Localization
 
@@ -463,10 +679,59 @@ Logger.debug("Expense created: id=\(expenseId), amount=\(amount)")
 - Externalize dates, currencies, numbers
 - Test with RTL languages
 
-**Key Format**:
+**Android Implementation**:
 
-- Android: `R.string.expense_amount`
-- iOS: `NSLocalizedString("expense_amount", comment: "")`
+```xml
+<!-- res/values/strings.xml -->
+<resources>
+    <string name="expense_amount">Expense Amount</string>
+    <string name="add_expense">Add Expense</string>
+    <plurals name="expense_count">
+        <item quantity="one">%d expense</item>
+        <item quantity="other">%d expenses</item>
+    </plurals>
+</resources>
+
+<!-- Usage in code -->
+val expenseAmount = getString(R.string.expense_amount)
+val expenseCount = resources.getQuantityString(R.plurals.expense_count, count, count)
+```
+
+**iOS Implementation**:
+
+```swift
+// Localizable.strings (English)
+"expense_amount" = "Expense Amount";
+"add_expense" = "Add Expense";
+"expense_count" = "%d expense";
+"expense_count_plural" = "%d expenses";
+
+// Usage in code
+let expenseAmount = NSLocalizedString("expense_amount", comment: "")
+let expenseCount = String(format: NSLocalizedString("expense_count", comment: ""), count)
+```
+
+**Flutter Implementation**:
+
+```dart
+// lib/l10n/app_en.arb
+{
+  "@locale": "en",
+  "expenseAmount": "Expense Amount",
+  "addExpense": "Add Expense",
+  "expenseCount": "{count} expense",
+  "@expenseCount": {
+    "plural": "expenseCount",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  }
+}
+
+// Usage in code
+text: AppLocalizations.of(context)!.expenseAmount
+text: AppLocalizations.of(context)!.expenseCount(count)
+```
 
 **Shared Keys**:
 
@@ -487,19 +752,154 @@ Logger.debug("Expense created: id=\(expenseId), amount=\(amount)")
 
 **Implementation**:
 
-- Semantic labels
-- Accessibility hints
-- Focus management
-- Screen reader testing
+**Android Implementation**:
+
+```kotlin
+@Composable
+fun ExpenseCard(
+    expense: Expense,
+    onDelete: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .semantics {
+                this.contentDescription = "${expense.category.name} expense, ${expense.amount}, ${expense.date}"
+                this.onClick { onDelete() }
+            }
+            .minimumTouchTargetSize(48.dp),
+        onClick = onDelete
+    ) {
+        // Card content
+    }
+}
+```
+
+**iOS Implementation**:
+
+```swift
+struct ExpenseCard: View {
+    let expense: Expense
+    let onDelete: () -> Void
+    
+    var body: some View {
+        Card {
+            // Card content
+        }
+        .accessibilityLabel("\(expense.category.name) expense, \(expense.amount), \(expense.date)")
+        .accessibilityHint("Double tap to delete")
+        .accessibilityAddTraits(.isButton)
+    }
+}
+```
+
+**Flutter Implementation**:
+
+```dart
+Widget build(BuildContext context) {
+  return Semantics(
+    label: '${expense.category.name} expense, ${expense.amount}, ${expense.date}',
+    hint: 'Double tap to delete',
+    button: true,
+    child: Card(
+      child: InkWell(
+        onTap: onDelete,
+        child: // Card content
+      ),
+    ),
+  );
+}
+```
 
 #### Security Standards
 
-**Authentication**:
+**Authentication Implementation**:
 
-- OAuth 2.0 / JWT
-- Secure token storage (Keychain/Keystore)
-- Token refresh mechanism
-- Biometric authentication where available
+**Android Implementation**:
+
+```kotlin
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
+import java.security.KeyStore
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+
+class SecureStorage(context: Context) {
+    private val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+    
+    fun storeToken(token: String) {
+        val cipher = Cipher.getInstance(TRANSFORMATION)
+        cipher.init(Cipher.ENCRYPT_MODE, getSecretKey())
+        val encrypted = cipher.doFinal(token.toByteArray())
+        val sharedPreferences = context.getSharedPreferences("secure", Context.MODE_PRIVATE)
+        sharedPreferences.edit().putString("auth_token", Base64.encodeToString(encrypted, Base64.DEFAULT)).apply()
+    }
+    
+    fun getToken(): String? {
+        val sharedPreferences = context.getSharedPreferences("secure", Context.MODE_PRIVATE)
+        val encrypted = sharedPreferences.getString("auth_token", null) ?: return null
+        val cipher = Cipher.getInstance(TRANSFORMATION)
+        cipher.init(Cipher.DECRYPT_MODE, getSecretKey())
+        val decrypted = cipher.doFinal(Base64.decode(encrypted, Base64.DEFAULT))
+        return String(decrypted)
+    }
+}
+```
+
+**iOS Implementation**:
+
+```swift
+import Security
+import CryptoKit
+
+class SecureStorage {
+    func storeToken(_ token: String) throws {
+        let data = token.data(using: .utf8)!
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: "auth_token",
+            kSecValueData as String: data
+        ]
+        let status = SecItemAdd(query as CFDictionary, nil)
+        guard status == errSecSuccess else { throw KeychainError.unableToStore }
+    }
+    
+    func getToken() throws -> String {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: "auth_token",
+            kSecReturnData as String: true
+        ]
+        var result: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        guard status == errSecSuccess, let data = result as? Data else {
+            throw KeychainError.unableToRetrieve
+        }
+        return String(data: data, encoding: .utf8)!
+    }
+}
+```
+
+**Flutter Implementation**:
+
+```dart
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+class SecureStorage {
+  final _storage = const FlutterSecureStorage();
+
+  Future<void> storeToken(String token) async {
+    await _storage.write(key: 'auth_token', value: token);
+  }
+
+  Future<String?> getToken() async {
+    return await _storage.read(key: 'auth_token');
+  }
+
+  Future<void> deleteToken() async {
+    await _storage.delete(key: 'auth_token');
+  }
+}
+```
 
 **Data Security**:
 

@@ -26,6 +26,18 @@ Smart Expense Manager is a comprehensive mobile application for tracking persona
 - **Dependency Injection**: Hilt
 - **Testing**: JUnit, MockK, Espresso
 
+### Flutter (Cross-platform)
+
+- **Language**: Dart 3.0+
+- **UI Framework**: Flutter with Material Design
+- **Architecture**: Clean Architecture with BLoC
+- **Data Persistence**: Hive (NoSQL local database)
+- **State Management**: Flutter BLoC
+- **Dependency Injection**: GetIt
+- **Testing**: Flutter Test, Mockito
+- **Charts**: FL Chart
+- **Animations**: Lottie, Animations package
+
 ## Architecture
 
 ### Clean Architecture Layers
@@ -96,6 +108,8 @@ Smart Expense Manager is a comprehensive mobile application for tracking persona
 - Xcode 15.0+ (for iOS) / Android Studio Hedgehog+ (for Android)
 - iOS 17.0+ (deployment target) / Android 7.0+ (minSdk 24)
 - Swift 5.9+ / Kotlin 1.9+
+- Flutter 3.16+ (for cross-platform development)
+- Dart 3.0+
 
 ### iOS Setup
 
@@ -169,6 +183,45 @@ cd android_native
 ./gradlew installDebug
 ```
 
+### Flutter Setup
+
+- Clone the repository
+
+```bash
+git clone https://github.com/yourusername/SmartExpenseManager.git
+cd SmartExpenseManager
+```
+
+- Navigate to Flutter directory
+
+```bash
+cd flutter
+```
+
+- Install dependencies
+
+```bash
+flutter pub get
+```
+
+- Configure environment
+
+- Copy `.env.example` to `.env` and add your API keys
+- Update configuration files as needed
+
+- Run the app
+
+```bash
+# Check connected devices
+flutter devices
+
+# Run on specific device
+flutter run -d <device_id>
+
+# Or run on available emulator/device
+flutter run
+```
+
 ### Running Tests
 
 #### iOS Tests
@@ -200,6 +253,27 @@ cd android_native
 
 # Run specific test class
 ./gradlew test --tests "com.smartexpense.manager.domain.usecase.GetExpensesTest"
+```
+
+#### Flutter Tests
+
+```bash
+cd flutter
+
+# Run all tests
+flutter test
+
+# Run unit tests only
+flutter test --unit-tests
+
+# Run widget tests
+flutter test --widget-tests
+
+# Run with coverage
+flutter test --coverage
+
+# Run specific test file
+flutter test test/domain/usecases/expense_usecases_test.dart
 ```
 
 ## Project Structure
@@ -250,11 +324,27 @@ SmartExpenseManager/
 ├── flutter/                       # Flutter Application (Cross-platform)
 │   ├── lib/
 │   │   ├── core/                 # Core functionality
+│   │   │   ├── constants/       # App constants
+│   │   │   ├── theme/           # App theme
+│   │   │   └── utils/           # Utility functions
 │   │   ├── data/                 # Data layer
+│   │   │   ├── models/          # Data models
+│   │   │   ├── repositories/    # Repository implementations
+│   │   │   └── datasources/     # Local and remote data sources
 │   │   ├── domain/               # Domain layer
+│   │   │   ├── entities/        # Domain entities
+│   │   │   ├── usecases/        # Business logic
+│   │   │   └── repositories/    # Repository interfaces
 │   │   └── presentation/         # Presentation layer
+│   │       ├── bloc/            # BLoC state management
+│   │       ├── pages/           # Screen widgets
+│   │       ├── widgets/         # Reusable widgets
+│   │       └── routes/          # Navigation routes
 │   ├── android/                  # Android platform files
-│   └── ios/                      # iOS platform files
+│   ├── ios/                      # iOS platform files
+│   ├── test/                     # Test files
+│   ├── assets/                   # Images, fonts, etc.
+│   └── pubspec.yaml              # Dependencies and configuration
 └── README.md
 ```
 

@@ -6,6 +6,7 @@
 
 - 2 Android Developers
 - 2 iOS Developers
+- 1 Flutter Developer
 - 1 QA Engineer
 - 1 UI/UX Designer
 - 1 Backend Developer
@@ -35,18 +36,32 @@
 **Android Team**:
 
 - Set up Android project with Kotlin, Jetpack Compose, Hilt
-- Configure Room database schema
-- Set up Retrofit with base configuration
-- Implement navigation structure
-- Create base UI components
+- Configure Room database schema with @Entity annotations
+- Set up Retrofit with base configuration and interceptors
+- Implement navigation structure with Jetpack Navigation Compose
+- Create base UI components (Card, Button, TextField)
+- Set up ViewModelFactory with Hilt injection
+- Configure ProGuard/R8 for release builds
 
 **iOS Team**:
 
 - Set up iOS project with SwiftUI, SwiftData
-- Configure data models
-- Set up URLSession networking layer
-- Implement navigation structure
-- Create base UI components
+- Configure data models with @Model annotations
+- Set up URLSession networking layer with async/await
+- Implement navigation structure with NavigationStack
+- Create base UI components (Card, Button, TextField)
+- Set up dependency injection container
+- Configure app signing and provisioning profiles
+
+**Flutter Team**:
+
+- Set up Flutter project with BLoC, Hive
+- Configure data models with HiveType annotations
+- Set up Dio networking layer with interceptors
+- Implement navigation structure with GoRouter
+- Create base UI components (Card, Button, TextField)
+- Set up GetIt service locator for DI
+- Configure build flavors (dev, staging, prod)
 
 **Backend Developer**:
 
@@ -84,7 +99,7 @@
 
 **Deliverables**:
 
-- Running Android and iOS apps with navigation
+- Running Android, iOS, and Flutter apps with navigation
 - Working authentication flow
 - CI/CD pipelines running
 - API documentation complete
@@ -103,21 +118,33 @@
 
 **Android Team**:
 
-- Implement login/signup screens
-- Integrate authentication API
-- Implement token management
-- Build dashboard UI with expense summary
-- Implement category list and selection
-- Set up Room database with initial schema
+- Implement login/signup screens with Jetpack Compose
+- Integrate authentication API with Retrofit coroutines
+- Implement token management with EncryptedSharedPreferences
+- Build dashboard UI with LazyColumn and StateFlow
+- Implement category list with LazyRow and chips
+- Set up Room database with @Entity, @Dao, @Database
+- Add ViewModel with Hilt @Inject constructor
 
 **iOS Team**:
 
-- Implement login/signup screens
-- Integrate authentication API
-- Implement token management (Keychain)
-- Build dashboard UI with expense summary
-- Implement category list and selection
-- Set up SwiftData with initial schema
+- Implement login/signup screens with SwiftUI
+- Integrate authentication API with URLSession async/await
+- Implement token management with Keychain
+- Build dashboard UI with List and @State
+- Implement category list with ScrollView and chips
+- Set up SwiftData with @Model and @Query
+- Add ViewModel with @ObservableObject
+
+**Flutter Team**:
+
+- Implement login/signup screens with Flutter widgets
+- Integrate authentication API with Dio async/await
+- Implement token management with flutter_secure_storage
+- Build dashboard UI with ListView and BLoC state
+- Implement category list with ListView and chips
+- Set up Hive with HiveType and HiveField
+- Add BLoC cubit with @injectable from GetIt
 
 **Backend Developer**:
 
@@ -148,7 +175,7 @@
 
 **Deliverables**:
 
-- Working authentication on both platforms
+- Working authentication on all platforms
 - Dashboard showing expense summary
 - Category management functional
 - Local database operational
@@ -166,21 +193,30 @@
 
 **Android Team**:
 
-- Build expense creation form
-- Implement image capture and upload
-- Add expense editing functionality
-- Implement filtering by date, category, amount
-- Add search functionality
-- Implement offline expense queue
+- Build expense creation form with Compose TextField and DatePicker
+- Implement image capture with CameraX and upload with MultipartBody
+- Add expense editing with pre-filled form
+- Implement filtering with Room @Query and Flow
+- Add search with Flow.debounce
+- Implement offline queue with WorkManager
 
 **iOS Team**:
 
-- Build expense creation form
-- Implement image capture and upload
-- Add expense editing functionality
-- Implement filtering by date, category, amount
-- Add search functionality
-- Implement offline expense queue
+- Build expense creation form with TextField and DatePicker
+- Implement image capture with UIImagePickerController and upload with URLSession
+- Add expense editing with pre-filled form
+- Implement filtering with SwiftData @Query and @Published
+- Add search with Combine debounce
+- Implement offline queue with BackgroundTasks
+
+**Flutter Team**:
+
+- Build expense creation form with TextField and showDatePicker
+- Implement image capture with image_picker and upload with Dio MultipartFile
+- Add expense editing with pre-filled form
+- Implement filtering with Hive queries and BLoC
+- Add search with BLoC debounce
+- Implement offline queue with workmanager package
 
 **Backend Developer**:
 
@@ -230,19 +266,27 @@
 
 **Android Team**:
 
-- Implement sync manager with conflict resolution
-- Build budget creation and tracking UI
-- Implement analytics charts and graphs
-- Add CSV/PDF export functionality
-- Implement push notification handling
+- Implement sync manager with Room and Retrofit, conflict resolution with timestamps
+- Build budget creation UI with Compose Slider and TextField
+- Implement analytics charts with MPAndroidChart or Compose charts
+- Add CSV export with Apache POI, PDF export with iText
+- Implement push notification with Firebase Messaging
 
 **iOS Team**:
 
-- Implement sync manager with conflict resolution
-- Build budget creation and tracking UI
-- Implement analytics charts and graphs
-- Add CSV/PDF export functionality
-- Implement push notification handling
+- Implement sync manager with SwiftData and URLSession, conflict resolution with timestamps
+- Build budget creation UI with SwiftUI Slider and TextField
+- Implement analytics charts with Swift Charts or Charts framework
+- Add CSV export with CSVWriter, PDF export with PDFKit
+- Implement push notification with APNs and UserNotifications
+
+**Flutter Team**:
+
+- Implement sync manager with Hive and Dio, conflict resolution with timestamps
+- Build budget creation UI with Flutter Slider and TextField
+- Implement analytics charts with FL Chart or charts_flutter
+- Add CSV export with csv package, PDF export with pdf package
+- Implement push notification with firebase_messaging
 
 **Backend Developer**:
 
@@ -301,21 +345,30 @@
 
 **Android Team**:
 
-- Optimize app startup time
-- Improve memory management
-- Add accessibility labels and support
-- Implement localization (5 languages)
-- Fix reported bugs
-- Optimize image loading
+- Optimize app startup with baseline profiles and startup tasks
+- Improve memory management with LeakCanary and proper lifecycle handling
+- Add accessibility labels with contentDescription and touchTargetSize
+- Implement localization with string resources and Translations
+- Fix reported bugs from QA
+- Optimize image loading with Coil caching and placeholder strategies
 
 **iOS Team**:
 
-- Optimize app startup time
-- Improve memory management
-- Add accessibility labels and support
-- Implement localization (5 languages)
-- Fix reported bugs
-- Optimize image loading
+- Optimize app startup with lazy loading and prewarming
+- Improve memory management with Instruments and proper lifecycle handling
+- Add accessibility labels with accessibilityLabel and accessibilityHint
+- Implement localization with Localizable.strings and NSLocalizedString
+- Fix reported bugs from QA
+- Optimize image loading with Kingfisher caching and placeholder strategies
+
+**Flutter Team**:
+
+- Optimize app startup with deferred loading and initialization
+- Improve memory management with proper dispose and memory profiling
+- Add accessibility labels with Semantics widget
+- Implement localization with ARB files and AppLocalizations
+- Fix reported bugs from QA
+- Optimize image loading with cached_network_image and placeholder strategies
 
 **Backend Developer**:
 
@@ -373,19 +426,30 @@
 
 **Android Team**:
 
-- Final code review and cleanup
-- Prepare release build
-- Create screenshots and store listing
-- Write release notes
-- Fix any remaining issues
+- Final code review with Kotlin and Compose best practices
+- Prepare release build with bundleRelease and signing config
+- Create screenshots with Android Emulator and fastlane
+- Write release notes for Google Play
+- Fix any remaining issues from QA
+- Test release build on multiple Android versions
 
 **iOS Team**:
 
-- Final code review and cleanup
-- Prepare release build
-- Create screenshots and store listing
-- Write release notes
-- Fix any remaining issues
+- Final code review with Swift and SwiftUI best practices
+- Prepare release build with xcodebuild archive and export
+- Create screenshots with iOS Simulator and fastlane
+- Write release notes for App Store
+- Fix any remaining issues from QA
+- Test release build on multiple iOS versions
+
+**Flutter Team**:
+
+- Final code review with Dart and Flutter best practices
+- Prepare release build with flutter build apk/appbundle
+- Create screenshots with Android Emulator and iOS Simulator
+- Write release notes for both stores
+- Fix any remaining issues from QA
+- Test release build on both platforms
 
 **Backend Developer**:
 

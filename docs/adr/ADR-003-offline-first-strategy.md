@@ -43,8 +43,10 @@ We will implement an offline-first architecture where all data is stored locally
 
 ## Implementation
 
-- SwiftData for local persistence
-- Background sync with BackgroundTasks
+- SwiftData for iOS local persistence
+- Room for Android local persistence
+- Hive for Flutter local persistence
+- Background sync with BackgroundTasks/WorkManager
 - Conflict resolution using timestamps
 - Sync status indicators in UI
 - Queue for pending operations

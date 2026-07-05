@@ -238,6 +238,130 @@ jobs:
 
 ---
 
+## Flutter CI/CD Pipeline
+
+### Workflow Configuration
+
+```yaml
+name: Flutter CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.16.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Install dependencies
+      run: |
+        cd flutter
+        flutter pub get
+        
+    - name: Run Lint
+      run: |
+        cd flutter
+        flutter analyze
+        
+    - name: Run Unit Tests
+      run: |
+        cd flutter
+        flutter test --coverage
+        
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: flutter/coverage/lcov.info
+        
+    - name: Build Debug APK
+      run: |
+        cd flutter
+        flutter build apk --debug
+        
+    - name: Upload Debug APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: debug-apk
+        path: flutter/build/app/outputs/flutter-apk/app-debug.apk
+        
+    - name: Build Release APK
+      if: github.ref == 'refs/heads/main'
+      run: |
+        cd flutter
+        flutter build apk --release
+        
+    - name: Upload Release APK
+      if: github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-apk
+        path: flutter/build/app/outputs/flutter-apk/app-release.apk
+```
+
+### UI Testing Pipeline
+
+```yaml
+name: Flutter UI Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  ui-test:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.16.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Install dependencies
+      run: |
+        cd flutter
+        flutter pub get
+        
+    - name: Run Integration Tests
+      run: |
+        cd flutter
+        flutter test integration_test/
+```
+
+### Static Code Analysis
+
+```yaml
+- name: Run Flutter Analyze
+  run: |
+    cd flutter
+    flutter analyze
+    
+- name: Run Custom Lint
+  run: |
+    cd flutter
+    flutter pub run custom_lint
+```
+
+---
+
 ## Automated Builds
 
 ### Build Triggers
@@ -259,6 +383,12 @@ jobs:
 - Debug: Development and testing
 - Release: Production builds with provisioning
 
+**Flutter**:
+
+- Debug: Development and testing
+- Release: Production builds with signing
+- Profile: Performance profiling builds
+
 ### Build Artifacts
 
 **Android**:
@@ -273,6 +403,14 @@ jobs:
 
 - IPA files
 - Archive files
+- Test results
+- Lint reports
+- Coverage reports
+
+**Flutter**:
+
+- APK files (Android from Flutter)
+- IPA files (iOS from Flutter)
 - Test results
 - Lint reports
 - Coverage reports
@@ -329,6 +467,29 @@ line_length: 120
 
 **Xcode Static Analyzer**: Built-in Xcode analysis
 
+### Flutter Tools
+
+**Flutter Analyze**: Built-in Flutter static analysis
+
+```yaml
+# analysis_options.yaml
+linter:
+  rules:
+    prefer_const_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    avoid_print: true
+    prefer_single_quotes: true
+```
+
+**Custom Lint**: Additional Dart linting rules
+
+```yaml
+# pubspec.yaml
+dev_dependencies:
+  custom_lint: ^0.5.0
+  flutter_lints: ^3.0.0
+```
+
 ---
 
 ## Unit Testing
@@ -364,6 +525,20 @@ line_length: 120
     xcode: true
 ```
 
+### Flutter
+
+```yaml
+- name: Run Unit Tests
+  run: |
+    cd flutter
+    flutter test --coverage
+    
+- name: Upload Coverage to Codecov
+  uses: codecov/codecov-action@v3
+  with:
+    files: flutter/coverage/lcov.info
+```
+
 ---
 
 ## UI Testing
@@ -389,6 +564,15 @@ line_length: 120
       -scheme SmartExpenseManager \
       -destination 'platform=iOS Simulator,name=iPhone 14' \
       -only-testing:SmartExpenseManagerUITests
+```
+
+### Flutter
+
+```yaml
+- name: Run UI Tests
+  run: |
+    cd flutter
+    flutter test integration_test/
 ```
 
 ---
@@ -428,6 +612,25 @@ line_length: 120
       -archivePath build/SmartExpenseManager.xcarchive \
       -exportPath build/export \
       -exportOptionsPlist ExportOptions.plist
+```
+
+### Flutter APK/IPA
+
+```yaml
+- name: Build Android Release APK
+  run: |
+    cd flutter
+    flutter build apk --release
+    
+- name: Build Android Release AAB
+  run: |
+    cd flutter
+    flutter build appbundle --release
+    
+- name: Build iOS Release IPA
+  run: |
+    cd flutter
+    flutter build ios --release
 ```
 
 ---
@@ -612,6 +815,21 @@ dependencies {
 import FirebaseCrashlytics
 
 FirebaseApp.configure()
+```
+
+**Flutter**:
+
+```dart
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+await Firebase.initializeApp();
+FlutterError.onError = (errorDetails) {
+  FirebaseCrashlytics.instance.recordError(
+    errorDetails.exception,
+    errorDetails.stack,
+  );
+};
 ```
 
 ### Crash Reporting Setup
